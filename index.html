@@ -1,162 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FERS RA Guide + Retirement Calculator</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f9fafc;
-      color: #333;
-      line-height: 1.6;
-      padding: 2rem;
-      max-width: 900px;
-      margin: auto;
-    }
-    h1, h2, h3 {
-      color: #2c3e50;
-    }
-    h1 {
-      font-size: 2rem;
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    a {
-      color: #0077cc;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    blockquote {
-      background: #eef6fb;
-      padding: 1rem;
-      border-left: 4px solid #3498db;
-      margin-bottom: 2rem;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1rem 0;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 0.75rem;
-      text-align: left;
-    }
-    input, select, button {
-      display: block;
-      width: 100%;
-      margin: 0.5rem 0 1.5rem;
-      padding: 0.75rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    button {
-      background: #2c3e50;
-      color: white;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
-    button:hover {
-      background: #1a242f;
-    }
-    .result {
-      background: #e8f5e9;
-      border-left: 5px solid #43a047;
-      padding: 1rem;
-      margin-top: 2rem;
-      border-radius: 6px;
-    }
-    ul {
-      padding-left: 1.2rem;
-    }
-    hr {
-      margin: 3rem 0;
-      border: none;
-      border-top: 1px solid #ccc;
-    }
-  </style>
-</head>
-<body>
-
-<h1>Federal Disability Retirement Guide + FERS Calculator</h1>
-
-<blockquote>
-  🛠️ <strong>Welcome!</strong><br>
-  This guide is for federal employees facing medical challenges who are exploring <strong>reasonable accommodations</strong>, <strong>disability retirement</strong>, or <strong>early retirement options</strong> under FERS.
-</blockquote>
-
-<h2>💡 Interactive FERS Retirement Calculator</h2>
-<form id="calcForm">
-  <label>High-3 Average Salary ($):</label>
-  <input type="number" id="high3" required>
-
-  <label>Years of Federal Service:</label>
-  <input type="number" id="years" required>
-
-  <label>VA Disability Monthly Compensation ($):</label>
-  <input type="number" id="vaComp" required>
-
-  <label>TSP Balance ($):</label>
-  <input type="number" id="tsp" required>
-
-  <label>TSP Withdrawal Rate (%):</label>
-  <input type="number" id="withdrawRate" value="4">
-
-  <label>Include FERS Annuity Supplement?</label>
-  <select id="fersSupp">
-    <option value="yes">Yes</option>
-    <option value="no">No</option>
-  </select>
-
-  <button type="submit">Calculate Estimate</button>
-</form>
-
-<div class="result" id="result"></div>
-
 <script>
-  document.getElementById('calcForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('calcForm').addEventListener('submit', function(e) {
+      e.preventDefault();
 
-    const high3 = parseFloat(document.getElementById('high3').value);
-    const years = parseFloat(document.getElementById('years').value);
-    const vaComp = parseFloat(document.getElementById('vaComp').value);
-    const tsp = parseFloat(document.getElementById('tsp').value);
-    const withdrawRate = parseFloat(document.getElementById('withdrawRate').value) / 100;
-    const fersSupp = document.getElementById('fersSupp').value;
+      const high3 = parseFloat(document.getElementById('high3').value);
+      const years = parseFloat(document.getElementById('years').value);
+      const vaComp = parseFloat(document.getElementById('vaComp').value);
+      const tsp = parseFloat(document.getElementById('tsp').value);
+      const withdrawRate = parseFloat(document.getElementById('withdrawRate').value) / 100;
+      const fersSupp = document.getElementById('fersSupp').value;
 
-    const pension = high3 * years * 0.011;
-    const tspMonthly = (tsp * withdrawRate) / 12;
-    const supplement = fersSupp === 'yes' ? 1300 : 0;
+      const pension = high3 * years * 0.011;
+      const tspMonthly = (tsp * withdrawRate) / 12;
+      const supplement = fersSupp === 'yes' ? 1300 : 0;
 
-    const totalMonthly = (pension / 12) + tspMonthly + vaComp + supplement;
+      const totalMonthly = (pension / 12) + tspMonthly + vaComp + supplement;
 
-    document.getElementById('result').innerHTML = `
-      <h3>Estimated Monthly Retirement Income:</h3>
-      <ul>
-        <li><strong>FERS Pension:</strong> $${(pension / 12).toFixed(2)}</li>
-        <li><strong>TSP Withdrawal:</strong> $${tspMonthly.toFixed(2)}</li>
-        <li><strong>VA Disability:</strong> $${vaComp.toFixed(2)}</li>
-        <li><strong>FERS Supplement:</strong> $${supplement.toFixed(2)}</li>
-        <li><strong><em>Total Estimate:</em></strong> <strong>$${totalMonthly.toFixed(2)}</strong></li>
-      </ul>
-    `;
+      document.getElementById('result').innerHTML = `
+        <h3>Estimated Monthly Retirement Income:</h3>
+        <ul>
+          <li><strong>FERS Pension:</strong> $${(pension / 12).toFixed(2)}</li>
+          <li><strong>TSP Withdrawal:</strong> $${tspMonthly.toFixed(2)}</li>
+          <li><strong>VA Disability:</strong> $${vaComp.toFixed(2)}</li>
+          <li><strong>FERS Supplement:</strong> $${supplement.toFixed(2)}</li>
+          <li><strong><em>Total Estimate:</em></strong> <strong>$${totalMonthly.toFixed(2)}</strong></li>
+        </ul>
+      `;
+    });
   });
 </script>
-
-<hr>
-
-<h2>📚 Resources</h2>
-<ul>
-  <li><a href="https://www.opm.gov/retirement-services/disability-retirement/">OPM Disability Retirement</a></li>
-  <li><a href="https://www.eeoc.gov/reasonable-accommodation">EEOC Reasonable Accommodation</a></li>
-  <li><a href="https://www.va.gov/disability/">VA Disability Compensation</a></li>
-</ul>
-
-<p style="margin-top: 2rem;"><em>Disclaimer: This tool is for general planning and informational purposes only. Always consult with your agency's HR or legal team for official retirement guidance.</em></p>
-
-</body>
-</html>

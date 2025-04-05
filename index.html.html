@@ -1,174 +1,162 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reasonable Accommodations and Retirement Guide</title>
+  <title>FERS RA Guide + Retirement Calculator</title>
   <style>
-    body { font-family: Arial, sans-serif; line-height: 1.6; padding: 2rem; max-width: 800px; margin: auto; }
-    h1, h2, h3 { color: #2c3e50; }
-    a { color: #2980b9; text-decoration: none; }
-    code, pre { background: #f4f4f4; padding: 0.2em 0.4em; border-radius: 4px; }
-    table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
-    th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
-    blockquote { background: #f9f9f9; padding: 1rem; border-left: 4px solid #ccc; }
-    hr { margin: 2rem 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9fafc;
+      color: #333;
+      line-height: 1.6;
+      padding: 2rem;
+      max-width: 900px;
+      margin: auto;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    h1 {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    a {
+      color: #0077cc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    blockquote {
+      background: #eef6fb;
+      padding: 1rem;
+      border-left: 4px solid #3498db;
+      margin-bottom: 2rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 0.75rem;
+      text-align: left;
+    }
+    input, select, button {
+      display: block;
+      width: 100%;
+      margin: 0.5rem 0 1.5rem;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      background: #2c3e50;
+      color: white;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #1a242f;
+    }
+    .result {
+      background: #e8f5e9;
+      border-left: 5px solid #43a047;
+      padding: 1rem;
+      margin-top: 2rem;
+      border-radius: 6px;
+    }
+    ul {
+      padding-left: 1.2rem;
+    }
+    hr {
+      margin: 3rem 0;
+      border: none;
+      border-top: 1px solid #ccc;
+    }
   </style>
 </head>
 <body>
 
-<h1>Guide to Reasonable Accommodations and Retirement Options for Federal Employees with Disabilities</h1>
+<h1>Federal Disability Retirement Guide + FERS Calculator</h1>
 
 <blockquote>
   🛠️ <strong>Welcome!</strong><br>
-  This guide is for federal employees facing medical challenges who are exploring <strong>reasonable accommodations</strong>, <strong>disability retirement</strong>, or <strong>early retirement options</strong> under FERS. Whether you're ADOS, a veteran, or any public servant navigating chronic health conditions, this guide is for you.
+  This guide is for federal employees facing medical challenges who are exploring <strong>reasonable accommodations</strong>, <strong>disability retirement</strong>, or <strong>early retirement options</strong> under FERS.
 </blockquote>
 
-<hr>
+<h2>💡 Interactive FERS Retirement Calculator</h2>
+<form id="calcForm">
+  <label>High-3 Average Salary ($):</label>
+  <input type="number" id="high3" required>
 
-<h2>Section 1: Understanding Reasonable Accommodations (RA)</h2>
+  <label>Years of Federal Service:</label>
+  <input type="number" id="years" required>
 
-<p><strong>What is a Reasonable Accommodation?</strong><br>
-A reasonable accommodation is any change or adjustment to a job or work environment that allows a qualified individual with a disability to perform essential job functions. This is a right under the Rehabilitation Act of 1973, which applies to federal employees.</p>
+  <label>VA Disability Monthly Compensation ($):</label>
+  <input type="number" id="vaComp" required>
 
-<ul>
-  <li>Permanent or expanded telework</li>
-  <li>Flexible work schedules</li>
-  <li>Modified job duties</li>
-  <li>Ergonomic equipment</li>
-  <li>Reassignment to a vacant position</li>
-</ul>
+  <label>TSP Balance ($):</label>
+  <input type="number" id="tsp" required>
 
-<p><strong>Eligibility Criteria:</strong></p>
-<ul>
-  <li>Documented physical or mental impairment that substantially limits major life activities</li>
-  <li>Disability must interfere with essential job duties</li>
-</ul>
+  <label>TSP Withdrawal Rate (%):</label>
+  <input type="number" id="withdrawRate" value="4">
 
-<p><strong>Process:</strong></p>
-<ol>
-  <li>Initiate request with supervisor or Disability Program Manager (DPM)</li>
-  <li>Provide supporting medical documentation</li>
-  <li>Engage in interactive discussion</li>
-  <li>Agency determines accommodation</li>
-</ol>
+  <label>Include FERS Annuity Supplement?</label>
+  <select id="fersSupp">
+    <option value="yes">Yes</option>
+    <option value="no">No</option>
+  </select>
 
-<p><strong>Tips:</strong></p>
-<ul>
-  <li>Document communications</li>
-  <li>Describe limitations, not diagnoses</li>
-</ul>
+  <button type="submit">Calculate Estimate</button>
+</form>
 
-<hr>
+<div class="result" id="result"></div>
 
-<h2>Section 2: FERS Retirement Options</h2>
+<script>
+  document.getElementById('calcForm').addEventListener('submit', function(e) {
+    e.preventDefault();
 
-<h3>1. Voluntary Early Retirement Authority (VERA)</h3>
-<ul>
-  <li>Age 50 with 20 years, or any age with 25 years of service</li>
-  <li>Immediate pension, no penalty</li>
-  <li>Includes FERS Annuity Supplement</li>
-</ul>
+    const high3 = parseFloat(document.getElementById('high3').value);
+    const years = parseFloat(document.getElementById('years').value);
+    const vaComp = parseFloat(document.getElementById('vaComp').value);
+    const tsp = parseFloat(document.getElementById('tsp').value);
+    const withdrawRate = parseFloat(document.getElementById('withdrawRate').value) / 100;
+    const fersSupp = document.getElementById('fersSupp').value;
 
-<h3>2. FERS Disability Retirement</h3>
-<ul>
-  <li>Available after 18 months of service</li>
-  <li>Must be medically unable to perform job for at least a year</li>
-  <li>Agency must be unable to accommodate or reassign</li>
-  <li>Must apply for SSDI</li>
-</ul>
+    const pension = high3 * years * 0.011;
+    const tspMonthly = (tsp * withdrawRate) / 12;
+    const supplement = fersSupp === 'yes' ? 1300 : 0;
 
-<h3>FERS Disability Pay Structure</h3>
-<ul>
-  <li>Year 1: 60% of High-3 minus 100% of SSDI</li>
-  <li>Years 2–62: 40% of High-3 minus 60% of SSDI</li>
-  <li>At 62: Converts to regular FERS annuity</li>
-</ul>
+    const totalMonthly = (pension / 12) + tspMonthly + vaComp + supplement;
 
-<h3>3. Disability vs. Early Retirement – Key Differences</h3>
-
-<table>
-<thead>
-<tr><th>Feature</th><th>VERA</th><th>FERS Disability</th></tr>
-</thead>
-<tbody>
-<tr><td>Age Requirement</td><td>50 w/ 20 or 25 yrs</td><td>Any age, 18+ mo service</td></tr>
-<tr><td>Immediate Retirement</td><td>Yes</td><td>Yes</td></tr>
-<tr><td>FERS Supplement</td><td>Yes</td><td>No</td></tr>
-<tr><td>SSDI Offset</td><td>No</td><td>Yes</td></tr>
-<tr><td>VA Disability Compatible</td><td>Yes</td><td>Yes (if separate)</td></tr>
-</tbody>
-</table>
-
-<hr>
-
-<h2>Section 3: Combining VA Disability with Federal Benefits</h2>
-<ul>
-  <li>VA disability + FERS annuity = OK</li>
-  <li>VA pay is tax-free</li>
-  <li>No offset unless conditions overlap</li>
-</ul>
-
-<p><strong>Conditions Supporting RA or Disability:</strong></p>
-<ul>
-  <li>IBS, GERD</li>
-  <li>Migraines</li>
-  <li>Colon cancer</li>
-  <li>PTSD, mental health</li>
-</ul>
-
-<hr>
-
-<h2>Section 4: Planning and Documentation Tips</h2>
-<ul>
-  <li>Keep records of episodes and leave</li>
-  <li>Use VA and doctor documentation</li>
-  <li>Track HR and supervisor communications</li>
-  <li>Utilize support groups, EEO, unions</li>
-</ul>
-
-<hr>
-
-<h2>📄 Downloadable Resources</h2>
-<ul>
-  <li><a href="#">Sample Reasonable Accommodation Request Letter (.docx)</a></li>
-  <li><a href="#">Pre-vs-Post Retirement Income Comparison (.xlsx)</a></li>
-  <li><a href="#">FERS Retirement Checklist (PDF)</a> (coming soon)</li>
-</ul>
-
-<hr>
-
-<h2>💡 Interactive Retirement Benefit Calculator (Coming Soon)</h2>
-<p>Features include:</p>
-<ul>
-  <li>Years of service, High-3, TSP, VA rating, SS estimates</li>
-  <li>Compare FERS Disability vs. VERA</li>
-  <li>Visualize phased retirement and delayed SS</li>
-  <li>Tax/insurance net income estimator</li>
-</ul>
-
-<hr>
-
-<h2>🙋 Need Help or Want to Contribute?</h2>
-<ul>
-  <li>Submit GitHub issue or PR</li>
-  <li>Email the guide maintainer</li>
-  <li>Join future support group (Slack/Discord)</li>
-</ul>
+    document.getElementById('result').innerHTML = `
+      <h3>Estimated Monthly Retirement Income:</h3>
+      <ul>
+        <li><strong>FERS Pension:</strong> $${(pension / 12).toFixed(2)}</li>
+        <li><strong>TSP Withdrawal:</strong> $${tspMonthly.toFixed(2)}</li>
+        <li><strong>VA Disability:</strong> $${vaComp.toFixed(2)}</li>
+        <li><strong>FERS Supplement:</strong> $${supplement.toFixed(2)}</li>
+        <li><strong><em>Total Estimate:</em></strong> <strong>$${totalMonthly.toFixed(2)}</strong></li>
+      </ul>
+    `;
+  });
+</script>
 
 <hr>
 
 <h2>📚 Resources</h2>
 <ul>
   <li><a href="https://www.opm.gov/retirement-services/disability-retirement/">OPM Disability Retirement</a></li>
-  <li><a href="https://www.eeoc.gov/reasonable-accommodation">EEOC RA Handbook</a></li>
-  <li><a href="https://www.va.gov/disability/">VA Compensation</a></li>
+  <li><a href="https://www.eeoc.gov/reasonable-accommodation">EEOC Reasonable Accommodation</a></li>
+  <li><a href="https://www.va.gov/disability/">VA Disability Compensation</a></li>
 </ul>
 
-<hr>
-
-<p><em>Disclaimer: This guide is not legal or HR advice. Confirm with OPM, SSA, VA, and agency HR before acting.</em></p>
+<p style="margin-top: 2rem;"><em>Disclaimer: This tool is for general planning and informational purposes only. Always consult with your agency's HR or legal team for official retirement guidance.</em></p>
 
 </body>
 </html>
